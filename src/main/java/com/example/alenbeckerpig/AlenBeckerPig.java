@@ -1,0 +1,301 @@
+package com.example.alenbeckerpig;
+
+import com.example.alenbeckerpig.client.render.PigPotionItemLayer;
+import com.example.alenbeckerpig.common.item.NetherWartWand;
+import com.example.alenbeckerpig.core.init.ItemInit;
+import com.example.alenbeckerpig.goal.DrinkPotionsGoal;
+import com.example.alenbeckerpig.goal.PickupItemGoal;
+import com.example.alenbeckerpig.goal.PotionPanicGoal;
+import com.example.alenbeckerpig.goal.RevengePotionGoal;
+
+import net.minecraft.block.NetherWartBlock;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.PigRenderer;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
+import net.minecraft.entity.ai.goal.LeapAtTargetGoal;
+import net.minecraft.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.entity.ai.goal.PanicGoal;
+import net.minecraft.entity.ai.goal.TemptGoal;
+import net.minecraft.entity.passive.PigEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.potion.Effects;
+import net.minecraft.world.GameRules;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.world.BlockEvent.BreakEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+// The value here should match an entry in the META-INF/mods.toml file
+@Mod(AlenBeckerPig.MOD_ID)
+public class AlenBeckerPig {
+	// Directly reference a log4j logger.
+	public static final Logger LOGGER = LogManager.getLogger();
+	public static final String MOD_ID = "alenbeckerpig";
+//bottly
+	
+	/*
+	 * 
+	 * {
+	"parent": "item/handheld",
+	"textures": {
+		"layer0": "alenbeckerpig:items/stick",
+		"layer1": "alenbeckerpig:items/nether_wart"
+	}
+}
+	 */
+	
+	/*
+	 * 
+	 * {
+	"parent": "item/handheld",
+	"textures": {
+		"layer0": "alenbeckerpig:items/nether_wart_wand"
+	}
+}
+	 */
+
+	public AlenBeckerPig() {
+		// Register the setup method for modloading
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::finishLoading);
+
+		ItemInit.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+
+		// 1.17
+		// FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerAttributes);
+
+		// Register ourselves for server and other game events we are interested in
+		MinecraftForge.EVENT_BUS.register(this);
+	}
+
+	private void setup(final FMLCommonSetupEvent event) {
+		// https://github.com/TheGreyGhost/MinecraftByExample/blob/master/src/main/java/minecraftbyexample/mbe11_item_variants/StartupClientOnly.java
+		/*
+		 * we need to attach the fullness PropertyOverride to the Item, but there are
+		 * two things to be careful of: 1) We should do this on a client installation
+		 * only, not on a DedicatedServer installation. Hence we need to use
+		 * FMLClientSetupEvent. 2) FMLClientSetupEvent is multithreaded but
+		 * ItemModelsProperties is not multithread-safe. So we need to use the
+		 * enqueueWork method, which lets us register a function for synchronous
+		 * execution in the main thread after the parallel processing is completed
+		 */
+		event.enqueueWork(() -> {
+			GlobalEntityTypeAttributes.put(EntityType.PIG,
+					PigEntity.func_234215_eI_().createMutableAttribute(Attributes.ATTACK_DAMAGE, 1.0D).create());
+		});
+	}
+
+	// 1.17
+	/*
+	 * public void registerAttributes(EntityAttributeCreationEvent event) {
+	 * event.put(EntityType.PIG,
+	 * PigEntity.func_234215_eI_().createMutableAttribute(Attributes.ATTACK_DAMAGE,
+	 * 0.5D).create()); }
+	 */
+
+	@OnlyIn(Dist.CLIENT)
+	private void finishLoading(FMLLoadCompleteEvent event) {
+		// AlenBeckerPig.addLayers();
+	}
+
+	public static void addLayers() {
+		EntityRenderer<?> render = Minecraft.getInstance().getRenderManager().renderers.get(EntityType.PIG);
+		if (render instanceof PigRenderer) {
+			PigRenderer pigRenderer = (PigRenderer) render;
+			pigRenderer.addLayer(new PigPotionItemLayer(pigRenderer));
+		}
+	}
+
+	/*
+	 * ToDo
+	 * 
+	 * add attack power: tweaking
+	 * 
+	 * add drinking to pig with drinking sounds: tweaking
+	 * 
+	 * apply potion effects when a potion has been drunken: done? / messy
+	 * 
+	 * filter pick-e-ble items
+	 * https://www.tabnine.com/code/java/methods/net.minecraft.potion.PotionUtils/
+	 * getPotionFromItem
+	 * 
+	 * 
+	 * add Bleu's Nether Wart Wand
+	 * 
+	 * Extra
+	 * 
+	 * show potion/item in mouth
+	 * 
+	 * turn head up so it will looks like it is drinking
+	 * 
+	 * turn head up before it starts drinking? look at pig if this is what happends:
+	 * onderzoek
+	 * 
+	 * 
+	 * make pig stand still and have belly sounds like in alen becker pig
+	 * 
+	 * 
+	 * CLEANUP
+	 * 
+	 * cleanup comments
+	 * 
+	 * put class variables in top
+	 * 
+	 * remove unused imports!: always busy!
+	 * 
+	 * move events to own class
+	 * 
+	 * move items (functions) to own class if needed
+	 */
+
+	/*
+	 * wat als ik er voor kan zorgen dat een pig meerdere potions kan drinken zolang
+	 * er een potion in de buurt ligt? maar hij moet eerst door de drinken heen gaan
+	 * en een lege terug gooien voordat die de volgede pakt wanneer er geen potions
+	 * meer zijn om te drinken krijgt die de status effecten want nu is het zoals
+	 * die er 1 drinkt dat die ook effects krijgt die die niet gedronken had!
+	 * 
+	 * 
+	 * WAT ALS! een pig in een village leeft en potions heeft gedronken, wanneer een
+	 * zombie aanvalt dan valt die alle monsters aan! Pig protector!
+	 */
+
+	@SubscribeEvent
+	public void joinWorld(EntityJoinWorldEvent event) {
+		if (!(event.getEntity() instanceof PigEntity)) {
+			return;
+		}
+
+		PigEntity pig = (PigEntity) event.getEntity();
+		this.addPigGoals(pig);
+		// pig.clearActivePotions();// faster testing, for now
+	}
+
+	private void addPigGoals(PigEntity pig) {
+		// removes default pig goals
+		pig.goalSelector.getRunningGoals().forEach((goal) -> {
+			if (goal.getGoal() instanceof PanicGoal) {
+				pig.goalSelector.removeGoal(goal.getGoal());
+			}
+		});
+		
+		pig.targetSelector.addGoal(1, new PotionPanicGoal(pig, 1.25D));
+
+		/// items that the pig wants
+		pig.goalSelector.addGoal(6, new TemptGoal(pig, 1.2D, false, Ingredient.fromItems(Items.NETHER_WART)));
+
+		// change priority of this goal?
+		pig.goalSelector.addGoal(5, new PickupItemGoal<PigEntity>(pig));// 5
+		pig.goalSelector.addGoal(5, new DrinkPotionsGoal<PigEntity>(pig));// 5
+		pig.targetSelector.addGoal(4, new RevengePotionGoal<PlayerEntity>(pig, PlayerEntity.class, true, false));// 0
+
+		pig.goalSelector.addGoal(4, new LeapAtTargetGoal(pig, 0.4F));// 4
+		pig.goalSelector.addGoal(5, new MeleeAttackGoal(pig, 1.0D, true));// 5
+	}
+
+	// going to be static because other classes use this too
+	public void dropEmptyBottle(PigEntity pig) {
+		// isRemote prevents ghost items
+		if (!pig.world.isRemote) {
+			if (pig.world.getGameRules().getBoolean(GameRules.DO_MOB_LOOT)) {
+				pig.entityDropItem(Items.GLASS_BOTTLE);
+			}
+		}
+	}
+
+	// going to be static because other classes use this too
+	// yeahh... we know what happens in here >.>
+	public void dropPotionInventory(PigEntity pig) {
+		if (!pig.world.getGameRules().getBoolean(GameRules.DO_MOB_LOOT)) {
+			return;
+		}
+
+		// isRemote prevents ghost items
+		if (!pig.world.isRemote) {
+			ItemStack itemstack = pig.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
+			if (!itemstack.isEmpty()) {
+				pig.entityDropItem(itemstack);
+				this.clearPotionInventory(pig);
+			}
+		}
+	}
+
+	// going to be static because other classes use this too
+	// yeahh... we know what happens in here >.>
+	public void clearPotionInventory(PigEntity pig) {
+		pig.setItemStackToSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
+	}
+	
+	@SubscribeEvent
+	public void onBlockBreak(BreakEvent event) {
+		if((event.getState().getBlock() instanceof NetherWartBlock) ) {
+			this.LOGGER.info("okay?..");
+		}
+		if(!(event.getState().getBlock() instanceof NetherWartBlock) ) {
+			this.LOGGER.info("not?..");
+			return;
+		}
+		this.LOGGER.info("bleep..");
+		
+		/*if(event.getState().get(NetherWartWand.PLACED_BY_WAND)) {
+			this.LOGGER.info("hi..");
+		}*/
+	}
+
+	@SubscribeEvent
+	public void onHit(LivingAttackEvent event) {
+		if (!(event.getEntity() instanceof PigEntity)) {
+			return;
+		}
+
+		PigEntity pig = (PigEntity) event.getEntity();
+
+		this.dropPotionInventory(pig);
+
+	}
+
+	// on dead drop potion if not fully drinken
+	// our poor pig.. ;w;
+	@SubscribeEvent
+	public void onDeath(LivingDeathEvent event) {
+		if (!(event.getEntity() instanceof PigEntity)) {
+			return;
+		}
+
+		PigEntity pig = (PigEntity) event.getEntity();
+		
+		pig.entityDropItem(ItemInit.NETHER_WART_WAND.get());
+
+		this.dropPotionInventory(pig);
+
+		// this.rand
+		if (pig.getActivePotionEffect(Effects.HERO_OF_THE_VILLAGE) != null) {
+			// 1 op de 100 so 1%
+			if (pig.world.rand.nextInt(99) == 0) {
+				// drop nether wart wand
+				pig.entityDropItem(ItemInit.NETHER_WART_WAND.get());
+			}
+
+		}
+
+	}
+
+}

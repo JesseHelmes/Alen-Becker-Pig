@@ -1,0 +1,13 @@
+modLoader="javafml"
+loaderVersion="[35,)"
+license="Creative Commons"
+
+[[mods]]
+modId="alenbeckerpig"
+version="1.0"
+displayName="Alen Becker Pig"
+credits="Thanks for all my subscribers and ilja615 for being cool." 
+authors="Silverwing."
+description='''
+This mod is been inspered on the pig in Stickfigures vs Minecraft from Alen Becker Animations.
+'''

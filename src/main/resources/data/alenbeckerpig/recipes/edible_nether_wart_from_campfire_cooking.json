@@ -1,0 +1,11 @@
+{
+	"type": "minecraft:campfire_cooking",
+	"experience": 2.5,
+	"cookingtime": 600,
+	"ingredient": {
+		"item": "minecraft:nether_wart"
+	},
+	"result": {
+		"item": "alenbeckerpig:edible_nether_wart"
+	}
+}

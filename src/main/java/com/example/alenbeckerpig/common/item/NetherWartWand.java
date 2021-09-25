@@ -1,18 +1,13 @@
 package com.example.alenbeckerpig.common.item;
 
-import java.util.Set;
-
-import com.example.alenbeckerpig.AlenBeckerPig;
-import com.example.alenbeckerpig.mixin.NetherWartBlockMixin;
+import com.example.alenbeckerpig.core.init.BlockInit;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableMultimap.Builder;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.CampfireBlock;
 import net.minecraft.block.GrassPathBlock;
 import net.minecraft.block.NetherWartBlock;
 import net.minecraft.block.SoulSandBlock;
@@ -28,10 +23,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.TieredItem;
-import net.minecraft.item.ToolItem;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
@@ -42,10 +33,10 @@ import net.minecraft.world.World;
 // extends TieredItem implements IVanishable
 //toch niet toolItem? het is geen tool.. maar wel een tier
 public class NetherWartWand extends TieredItem implements IVanishable {
-	//this is a compensation, as i am not able to place a nether warts next to another that is not on soul sand.
-	//or i have to extend nether wart block.. and use that, but spawn nether wart items only
-	private static final Set<Block> EFFECTIVE_ON = Sets.newHashSet(Blocks.DIRT, Blocks.COARSE_DIRT, Blocks.SOUL_SAND,
-			Blocks.GRASS, Blocks.GRASS_PATH);
+	// this is a compensation, as i am not able to place a nether warts next to
+	// another that is not on soul sand.
+	// or i have to extend nether wart block.. and use that, but spawn nether wart
+	// items only
 	private final float attackDamage;
 	/** Modifiers applied when the item is in the mainhand of a user. */
 	private final Multimap<Attribute, AttributeModifier> attributeModifiers;
@@ -115,32 +106,29 @@ public class NetherWartWand extends TieredItem implements IVanishable {
 			return ActionResultType.PASS;
 		} else {
 			BlockState blockstate1 = null;
-			if (world.isAirBlock(blockpos.up()) && NetherWartWand.EFFECTIVE_ON.contains(blockstate.getBlock())) {
+			if (world.isAirBlock(blockpos.up()) && blockstate.isSolid()) {
 				world.playSound(playerentity, blockpos, SoundEvents.ITEM_NETHER_WART_PLANT, SoundCategory.BLOCKS, 1.0F,
 						1.0F);
-				blockstate1 = Blocks.NETHER_WART.getDefaultState();
-				AlenBeckerPig.LOGGER.info(blockstate1.getProperties());
+
+				// looks first if the underlaying block is a Soul Block, if it is Soul Block
+				// then it will place the default Nether Wart block.
+				// this is only for when our mod gets removed and in that case all Nether Warts
+				// placed on Soul Sands will stay
+				// unlike our custom placeable clone of the Nether Wart, this one will disappear
+				// if you removed the mod.
+				if ((blockstate.getBlock() instanceof SoulSandBlock)) {
+					blockstate1 = Blocks.NETHER_WART.getDefaultState();
+				} else {
+					blockstate1 = BlockInit.PLACEABLE_NETHER_WART.get().getDefaultState();
+				}
 			}
 
 			if (blockstate1 != null) {
 				if (!world.isRemote) {
-					AlenBeckerPig.LOGGER.info("place nether wart");
-					// .with(NetherWartBlockMixin.PLACED_BY_WAND, true)
-
-					/*
-					 * if(blockstate.getBlock() instanceof GrassPathBlock || blockstate.getBlock()
-					 * instanceof GrassBlock) { //world.setBlockState(blockpos,
-					 * Blocks.DIRT.getDefaultState(), 11); world.setBlockState(blockpos,
-					 * Blocks.SOUL_SAND.getDefaultState(), 11); }
-					 */
-
-					if (!(blockstate.getBlock() instanceof SoulSandBlock)) {
-						world.setBlockState(blockpos, Blocks.SOUL_SAND.getDefaultState(), 11);
-					}
-
 					world.setBlockState(blockpos.up(), blockstate1.with(NetherWartBlock.AGE, this.getMaxAge()), 11);
-
-					// world.setBlockState(blockpos, Blocks.SOUL_SAND.getDefaultState(), 11);
+					if (blockstate.getBlock() instanceof GrassPathBlock) {
+						world.setBlockState(blockpos, Blocks.DIRT.getDefaultState(), 11);
+					}
 					if (playerentity != null) {
 						context.getItem().damageItem(this.reseiveDamage(playerentity), playerentity, (player) -> {
 							player.sendBreakAnimation(context.getHand());

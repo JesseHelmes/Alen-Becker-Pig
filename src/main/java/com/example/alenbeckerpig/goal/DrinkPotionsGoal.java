@@ -1,6 +1,5 @@
 package com.example.alenbeckerpig.goal;
 
-import com.example.alenbeckerpig.AlenBeckerPig;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.entity.MobEntity;
@@ -122,8 +121,6 @@ public class DrinkPotionsGoal<T extends MobEntity> extends Goal {
 			return;
 		}
 
-		//AlenBeckerPig.LOGGER.info("applying potions..");
-
 		switch (this.user.world.getDifficulty()) {
 		case EASY:
 			// apply current potion
@@ -155,7 +152,7 @@ public class DrinkPotionsGoal<T extends MobEntity> extends Goal {
 
 	}
 	
-	//oh.. i cant?
+	//oh.. i cant use a switch?
 	/*public Effect convertNegatifToPositiveEffect(Effect effect) {
 		if(effect == Effects.WEAKNESS) {
 			return Effects.STRENGTH;

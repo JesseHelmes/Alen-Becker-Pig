@@ -1,3 +1,9 @@
 {
-	"item.alenbeckerpig.nether_wart_wand": "Nether wart wand"
+	"block.alenbeckerpig.placeable_nether_wart": "Nether Wart",
+	"item.alenbeckerpig.edible_nether_wart": "Edible Nether Wart",
+	"item.alenbeckerpig.nether_wart_wand": "Nether Wart Wand",
+	"item.alenbeckerpig.nether_wart_wand_ugly": "Ugly Nether Wart Wand",
+	"item.alenbeckerpig.butter": "Butter",
+	"advancements.nether.eat_nether_wart.title": "Mmm~ Spicy!",
+	"advancements.nether.eat_nether_wart.description": "Eat a Nether Wart"
 }

@@ -1,0 +1,15 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"###"
+	],
+	"key": {
+		"#": {
+			"item": "minecraft:dandelion"
+		}
+	},
+	"result": {
+		"item": "alenbeckerpig:butter",
+		"count": 1
+	}
+}

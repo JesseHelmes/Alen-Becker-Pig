@@ -1,0 +1,39 @@
+{
+	"parent": "minecraft:nether/root",
+	"display": {
+		"icon": {
+			"item": "minecraft:nether_wart"
+		},
+		"title": {
+			"translate": "advancements.nether.eat_nether_wart.title"
+		},
+		"description": {
+			"translate": "advancements.nether.eat_nether_wart.description"
+		},
+		"frame": "goal",
+		"show_toast": true,
+		"announce_to_chat": true,
+		"hidden": true
+	},
+	"criteria": {
+		"eat_nether_wart": {
+			"trigger": "minecraft:consume_item",
+			"conditions": {
+				"item": {
+					"item": "alenbeckerpig:edible_nether_wart"
+				}
+			}
+		}
+	},
+	"requirements": [
+		[
+			"eat_nether_wart"
+		]
+	],
+	"rewards": {
+		"experience": 10,
+		"loot": [
+			"alenbeckerpig:gameplay/eat_nether_wart"
+		]
+	}
+}

@@ -1,0 +1,38 @@
+{
+	"parent": "minecraft:adventure/root",
+	"display": {
+		"icon": {
+			"item": "minecraft:cod"
+		},
+		"title": {
+			"translate": "advancements.adventure.player_killed_entity_with_cod.title"
+		},
+		"description": {
+			"translate": "advancements.adventure.player_killed_entity_with_cod.description"
+		},
+		"frame": "challenge",
+		"show_toast": true,
+		"announce_to_chat": true,
+		"hidden": false
+	},
+	"criteria": {
+		"player_killed_entity_with_cod": {
+			"trigger": "minecraft:player_killed_entity",
+			"conditions": {
+				"killing_blow": {
+					"source_entity": {
+						"nbt": "{SelectedItem:{id:\"minecraft:cod\"}}"
+					}
+				}
+			}
+		}
+	},
+	"requirements": [
+		[
+			"player_killed_entity_with_cod"
+		]
+	],
+	"rewards": {
+		"experience": 100
+	}
+}

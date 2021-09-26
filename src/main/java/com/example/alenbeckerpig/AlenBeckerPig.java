@@ -72,6 +72,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  * 
  * don't drop nether wart wand on pig death?
  * 
+ * make for cod a separated mod and have it use the classic blue cod with the mod name "classic cod"
+ * include the advencement, lang, attack damage and textures
  * 
  * Extra
  * 
@@ -171,7 +173,7 @@ public class AlenBeckerPig {
 
 	@OnlyIn(Dist.CLIENT)
 	private void finishLoading(FMLLoadCompleteEvent event) {
-		AlenBeckerPig.addLayers();
+		//AlenBeckerPig.addLayers();
 	}
 
 	public static void addLayers() {
@@ -183,7 +185,12 @@ public class AlenBeckerPig {
 	}
 
 	// just because logger info gives me all those shit parameters every time!
-	public static void info(Message msg) {
+	public static void info(String msg) {
+		AlenBeckerPig.LOGGER.info(msg);
+	}
+	
+
+	public static void info(Object msg) {
 		AlenBeckerPig.LOGGER.info(msg);
 	}
 
@@ -213,7 +220,7 @@ public class AlenBeckerPig {
 
 		// change priority of the goals?
 		pig.goalSelector.addGoal(5, new PickupItemGoal<PigEntity>(pig));// 5
-		// pig.goalSelector.addGoal(5, new DrinkPotionsGoal<PigEntity>(pig));// 5
+		pig.goalSelector.addGoal(5, new DrinkPotionsGoal<PigEntity>(pig));// 5
 		pig.targetSelector.addGoal(4, new RevengePotionGoal<PlayerEntity>(pig, PlayerEntity.class, true, false));// 0
 
 		pig.goalSelector.addGoal(4, new LeapAtTargetGoal(pig, 0.4F));// 4

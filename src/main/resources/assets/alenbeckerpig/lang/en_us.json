@@ -5,5 +5,7 @@
 	"item.alenbeckerpig.nether_wart_wand_ugly": "Ugly Nether Wart Wand",
 	"item.alenbeckerpig.butter": "Butter",
 	"advancements.nether.eat_nether_wart.title": "Mmm~ Spicy!",
-	"advancements.nether.eat_nether_wart.description": "Eat a Nether Wart"
+	"advancements.nether.eat_nether_wart.description": "Eat a Nether Wart",
+	"advancements.adventure.player_killed_entity_with_cod.title": "Fish is now a weapon?",
+	"advancements.adventure.player_killed_entity_with_cod.description": "Kill someone with a fish"
 }

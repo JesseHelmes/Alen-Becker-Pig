@@ -30,13 +30,13 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-// extends TieredItem implements IVanishable
-//toch niet toolItem? het is geen tool.. maar wel een tier
+/*
+ * 
+ * To get the same texture as the episode, i could combine the textures in the mod itself.
+Low graphics is using my version and for the higher ones i combine nether wart and a stick.
+Nether wart turn 45 and maybe scale the sides a bit incase you see overlapping glitch.
+ */
 public class NetherWartWand extends TieredItem implements IVanishable {
-	// this is a compensation, as i am not able to place a nether warts next to
-	// another that is not on soul sand.
-	// or i have to extend nether wart block.. and use that, but spawn nether wart
-	// items only
 	private final float attackDamage;
 	/** Modifiers applied when the item is in the mainhand of a user. */
 	private final Multimap<Attribute, AttributeModifier> attributeModifiers;

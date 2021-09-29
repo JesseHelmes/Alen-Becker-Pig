@@ -102,6 +102,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  */
 
 /*
+ * Low graphics is using my version and for the higher ones i combine nether wart and a stick. 
+ * Nether wart turn 45 and maybe scale the sides a bit incase you see overlapping glitch.
+ */
+
+/*
  * wat als ik er voor kan zorgen dat een pig meerdere potions kan drinken zolang
  * er een potion in de buurt ligt? maar hij moet eerst door de drinken heen gaan
  * en een lege terug gooien voordat die de volgede pakt wanneer er geen potions
@@ -173,7 +178,7 @@ public class AlenBeckerPig {
 
 	@OnlyIn(Dist.CLIENT)
 	private void finishLoading(FMLLoadCompleteEvent event) {
-		//AlenBeckerPig.addLayers();
+		AlenBeckerPig.addLayers();
 	}
 
 	public static void addLayers() {
@@ -188,7 +193,6 @@ public class AlenBeckerPig {
 	public static void info(String msg) {
 		AlenBeckerPig.LOGGER.info(msg);
 	}
-	
 
 	public static void info(Object msg) {
 		AlenBeckerPig.LOGGER.info(msg);
@@ -220,7 +224,7 @@ public class AlenBeckerPig {
 
 		// change priority of the goals?
 		pig.goalSelector.addGoal(5, new PickupItemGoal<PigEntity>(pig));// 5
-		pig.goalSelector.addGoal(5, new DrinkPotionsGoal<PigEntity>(pig));// 5
+		// pig.goalSelector.addGoal(5, new DrinkPotionsGoal<PigEntity>(pig));// 5
 		pig.targetSelector.addGoal(4, new RevengePotionGoal<PlayerEntity>(pig, PlayerEntity.class, true, false));// 0
 
 		pig.goalSelector.addGoal(4, new LeapAtTargetGoal(pig, 0.4F));// 4

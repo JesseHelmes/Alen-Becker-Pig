@@ -29,11 +29,13 @@ import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.potion.Effects;
 import net.minecraft.world.GameRules;
+import net.minecraftforge.common.BasicTrade;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.village.WandererTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -238,6 +240,12 @@ public class AlenBeckerPig {
 				&& event.getWorld().getBlockState(event.getPos()).getBlock().equals(Blocks.CAMPFIRE)) {
 			event.setCanceled(true);
 		}
+	}
+
+	@SubscribeEvent
+	public void addWanderTraderTrade(WandererTradesEvent event) {
+		event.getGenericTrades().add(new BasicTrade(4, new ItemStack(ItemInit.EDIBLE_NETHER_WART.get()), 5, 10));
+		event.getGenericTrades().add(new BasicTrade(64, new ItemStack(ItemInit.NETHER_WART_WAND.get()), 1, 640));
 	}
 
 	// NIET WAT IK ZOCHT!!!

@@ -51,3 +51,51 @@ https://www.youtube.com/watch?v=8VEdtQLuLO0&feature=youtu.be
 
 For more details update more often refer to the Forge Forums:
 http://www.minecraftforge.net/forum/index.php/topic,14048.0.html
+
+
+This mod is based on Alen becker stickfigures vs minecraft Video
+with Lucky Blocks
+"Lucky Blocks - Animation vs. Minecraft Shorts Ep 19 - YouTube"
+
+Features
+- Items
+	- Nether ward wand
+		- spawn nether ward on ground when right clicking a solid block with air above
+		- it spawn default minecraft nether ward on soul sand else it spawn our
+		custom block, this was in case if i would remove this mod
+		- it also has a ugly version, but this if for creative users
+		- immune to fire
+	- Edible Nether wart
+		- need to cook normal nether ward on a soul sand campfire
+		- nutrition 2
+		- saturation 0.6
+		- immune to fire
+	- Butter
+		- nutrition 3
+		- saturation 0.8
+		- crafted by butter ingot = 3 Dandelions on a row
+- Blocks
+	- Placeable Nether wart blocks
+- Entities
+	- Pig (altered)
+		- added Tempt item Nether wart
+		- pick up potions
+		- drink potions
+			- difficulty peaceful
+				- no effect
+			- difficulty easy
+				- gets effect from potion
+			- difficulty normal
+				- effect: speed, FIRE_RESISTANCE, haste, STRENGTH, INSTANT_HEALTH, JUMP_BOOST,
+				REGENERATION, RESISTANCE, WATER_BREATHING, NIGHT_VISION, HEALTH_BOOST, ABSORPTION,
+				SATURATION, LUCK, SLOW_FALLING, CONDUIT_POWER, DOLPHINS_GRACE
+			- default same as DOLPHINS_GRACE, but adds INVISIBILITY
+		- drop empty potion
+		- when player attacks a pig that drunk potions it will attack the player
+		- it uses HERO_OF_THE_VILLAGE to determine if it was from us
+		this is also to prevent pig from keep attacking or start attacking
+
+Planned features
+- render potion in mouth if not already
+
+Known bugs
